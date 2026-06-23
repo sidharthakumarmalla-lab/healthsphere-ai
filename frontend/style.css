@@ -1,0 +1,131 @@
+/* Google Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap');
+
+/* Base Styles */
+html, body, [class*="css"] {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Custom Gradient Header */
+.main-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00F260 0%, #0575E6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #a0aec0;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: 300;
+}
+
+/* Glassmorphism Cards */
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Stats Metric Dashboard Cards */
+.stat-card {
+    background: linear-gradient(145deg, rgba(20, 30, 48, 0.7) 0%, rgba(36, 59, 85, 0.7) 100%);
+    border: 1px solid rgba(0, 242, 96, 0.15);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #00F260;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: #cbd5e0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Severity Indicators */
+.severity-low {
+    border-left: 6px solid #00F260;
+    background: rgba(0, 242, 96, 0.05);
+}
+.severity-medium {
+    border-left: 6px solid #ECC94B;
+    background: rgba(236, 201, 75, 0.05);
+}
+.severity-high {
+    border-left: 6px solid #ED8936;
+    background: rgba(237, 137, 54, 0.05);
+}
+.severity-emergency {
+    border-left: 6px solid #E53E3E;
+    background: rgba(229, 62, 62, 0.08);
+    animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+}
+
+/* Emergency Banner */
+.emergency-banner {
+    background: linear-gradient(90deg, #E53E3E 0%, #9B2C2C 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(229, 62, 62, 0.35);
+    margin-bottom: 2rem;
+    animation: flash-emergency 1.5s infinite alternate;
+}
+
+@keyframes flash-emergency {
+    0% { opacity: 0.9; }
+    100% { opacity: 1; transform: scale(1.01); }
+}
+
+/* Styled Buttons */
+.stButton>button {
+    background: linear-gradient(135deg, #0575E6 0%, #00F260 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 0.6rem 1.5rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.stButton>button:hover {
+    transform: scale(1.03) !important;
+    box-shadow: 0 5px 15px rgba(0, 242, 96, 0.3) !important;
+}
+
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+    background-color: #0f172a !important;
+}

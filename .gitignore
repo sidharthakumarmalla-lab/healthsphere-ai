@@ -1,0 +1,23 @@
+# Virtual Environment
+venv/
+venv_new/
+
+# Python Cache
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# Databases and Vector Stores
+healthsphere.db
+chroma_db/
+
+# IDE and Agent Workspace directories
+.gemini/
+.idea/
+.vscode/
+scratch/
+.env
+
+# OS-specific files
+Thumbs.db
+Desktop.ini
