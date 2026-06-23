@@ -60,7 +60,6 @@ HealthSphere AI uses a collaborative **Multi-Agent Orchestration Model** where m
 ### Workflow Sequence
 
 ```mermaid
-flowerchart
 graph TD
     User([User Symptoms Input]) --> HG[Health Guardian Agent]
     HG -->|Query Vector History| DB[(ChromaDB Vector Store)]
