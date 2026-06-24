@@ -6,3 +6,5 @@ google-genai>=0.1.0
 chromadb>=0.4.24
 numpy>=1.26.0
 python-dotenv>=1.0.0
+cryptography>=42.0.0
+

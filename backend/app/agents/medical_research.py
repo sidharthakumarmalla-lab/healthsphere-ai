@@ -26,7 +26,7 @@ class MedicalResearchAgent(BaseAgent):
         prompt = (
             f"Symptoms: '{symptoms}' (Severity: {severity}).\n"
             f"Target Language: {language}.\n"
-            f"If language is Hindi, generate 'relevant_guidelines' and 'clinical_evidence' in Hindi Devnagari script.\n"
+            f"If language is not English, generate 'relevant_guidelines' and 'clinical_evidence' in the clear native script of the target language (e.g., Devanagari for Hindi/Marathi, Tamil script for Tamil, Telugu script for Telugu, Bengali script for Bengali, Kannada script for Kannada, Malayalam script for Malayalam, Gujarati script for Gujarati, Gurmukhi for Punjabi, Odia script for Odia).\n"
             f"Ensure condition details and indicators reflect the target language context.\n"
             f"Research potential conditions and standard care guidelines."
         )

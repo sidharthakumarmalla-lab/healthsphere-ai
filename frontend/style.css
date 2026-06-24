@@ -1,131 +1,215 @@
 /* Google Font Import */
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap');
 
-/* Base Styles */
+/* Base Styles & Custom Properties */
+:root {
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+    --emerald-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --amber-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --rose-gradient: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
+    --card-bg: rgba(15, 23, 42, 0.45);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --glass-blur: blur(14px);
+}
+
 html, body, [class*="css"] {
     font-family: 'Outfit', sans-serif;
+    color: #f1f5f9;
 }
 
 /* Custom Gradient Header */
 .main-title {
     font-family: 'Outfit', sans-serif;
     font-weight: 700;
-    background: linear-gradient(135deg, #00F260 0%, #0575E6 100%);
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
+    font-size: 3.2rem;
+    margin-bottom: 0.2rem;
     text-align: center;
+    letter-spacing: -0.5px;
+    animation: fade-in 1s ease-out;
 }
 
 .subtitle {
-    font-size: 1.1rem;
-    color: #a0aec0;
+    font-size: 1.15rem;
+    color: #94a3b8;
     text-align: center;
-    margin-bottom: 2rem;
-    font-weight: 300;
+    margin-bottom: 2.2rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    animation: fade-in 1.2s ease-out;
+}
+
+/* Animations */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.3); }
+    70% { box-shadow: 0 0 0 12px rgba(99, 102, 241, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
 }
 
 /* Glassmorphism Cards */
 .card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: var(--card-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: 18px;
+    border: 1px solid var(--border-color);
+    padding: 1.6rem;
+    margin-bottom: 1.6rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
 }
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.35);
 }
 
 /* Stats Metric Dashboard Cards */
 .stat-card {
-    background: linear-gradient(145deg, rgba(20, 30, 48, 0.7) 0%, rgba(36, 59, 85, 0.7) 100%);
-    border: 1px solid rgba(0, 242, 96, 0.15);
-    border-radius: 12px;
-    padding: 1rem;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.7) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.2rem;
     text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: rgba(168, 85, 247, 0.3);
+    transform: translateY(-2px);
 }
 
 .stat-value {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    color: #00F260;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .stat-label {
-    font-size: 0.85rem;
-    color: #cbd5e0;
+    font-size: 0.8rem;
+    color: #94a3b8;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    margin-top: 0.4rem;
+    font-weight: 500;
 }
 
 /* Severity Indicators */
 .severity-low {
-    border-left: 6px solid #00F260;
-    background: rgba(0, 242, 96, 0.05);
+    border-left: 6px solid #10b981;
+    background: rgba(16, 185, 129, 0.05);
 }
 .severity-medium {
-    border-left: 6px solid #ECC94B;
-    background: rgba(236, 201, 75, 0.05);
+    border-left: 6px solid #f59e0b;
+    background: rgba(245, 158, 11, 0.05);
 }
 .severity-high {
-    border-left: 6px solid #ED8936;
-    background: rgba(237, 137, 54, 0.05);
+    border-left: 6px solid #f43f5e;
+    background: rgba(244, 63, 94, 0.05);
 }
 .severity-emergency {
-    border-left: 6px solid #E53E3E;
-    background: rgba(229, 62, 62, 0.08);
+    border-left: 6px solid #be123c;
+    background: rgba(190, 18, 60, 0.08);
     animation: pulse-red 2s infinite;
 }
 
 @keyframes pulse-red {
-    0% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
+    70% { box-shadow: 0 0 0 12px rgba(244, 63, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0); }
 }
 
 /* Emergency Banner */
 .emergency-banner {
-    background: linear-gradient(90deg, #E53E3E 0%, #9B2C2C 100%);
+    background: var(--rose-gradient);
     color: white;
-    border-radius: 12px;
-    padding: 1.5rem;
+    border-radius: 16px;
+    padding: 1.8rem;
     text-align: center;
     font-weight: 600;
-    box-shadow: 0 10px 25px rgba(229, 62, 62, 0.35);
+    box-shadow: 0 12px 35px rgba(244, 63, 94, 0.4);
     margin-bottom: 2rem;
     animation: flash-emergency 1.5s infinite alternate;
 }
 
 @keyframes flash-emergency {
-    0% { opacity: 0.9; }
-    100% { opacity: 1; transform: scale(1.01); }
+    0% { opacity: 0.92; transform: scale(0.995); }
+    100% { opacity: 1; transform: scale(1.005); }
 }
 
-/* Styled Buttons */
+/* Vault Lock Box Screen styling */
+.vault-box {
+    max-width: 480px;
+    margin: 40px auto;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    border-radius: 20px;
+    padding: 2.5rem;
+    backdrop-filter: var(--glass-blur);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    text-align: center;
+}
+
+.vault-icon {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Custom styled inputs & selectors */
+.stTextInput>div>div>input, .stSelectbox>div>div>div>div {
+    background-color: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid var(--border-color) !important;
+    color: #f1f5f9 !important;
+    border-radius: 10px !important;
+}
+
+.stTextInput>div>div>input:focus {
+    border-color: #a855f7 !important;
+    box-shadow: 0 0 0 1px #a855f7 !important;
+}
+
+/* Premium styled buttons */
 .stButton>button {
-    background: linear-gradient(135deg, #0575E6 0%, #00F260 100%) !important;
+    background: var(--primary-gradient) !important;
     color: white !important;
     border: none !important;
-    border-radius: 8px !important;
+    border-radius: 10px !important;
     font-weight: 600 !important;
-    padding: 0.6rem 1.5rem !important;
-    transition: all 0.3s ease !important;
+    letter-spacing: 0.5px !important;
+    padding: 0.7rem 1.8rem !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
 }
 
 .stButton>button:hover {
-    transform: scale(1.03) !important;
-    box-shadow: 0 5px 15px rgba(0, 242, 96, 0.3) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.35) !important;
 }
 
 /* Sidebar styling */
 [data-testid="stSidebar"] {
-    background-color: #0f172a !important;
+    background-color: #0b0f19 !important;
+    border-right: 1px solid var(--border-color);
+}
+
+/* Expander custom design */
+.streamlit-expanderHeader {
+    background-color: rgba(30, 41, 59, 0.35) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 10px !important;
+    color: #e2e8f0 !important;
 }

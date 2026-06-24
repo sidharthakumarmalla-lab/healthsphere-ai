@@ -1,6 +1,7 @@
 import json
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Security, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security.api_key import APIKeyHeader
 from sqlalchemy.orm import Session
 from typing import List
 import datetime
@@ -9,11 +10,22 @@ from backend.app.database import engine, Base, get_db
 from backend.app import models, schemas
 from backend.app.seed_data import seed_database
 from backend.app.agents.orchestrator import orchestrator
+from backend.app.config import BACKEND_API_KEY
+
+api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=True)
+
+def verify_api_key(api_key: str = Security(api_key_header)):
+    if api_key != BACKEND_API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or missing X-API-KEY"
+        )
 
 # Initialize database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="HealthSphere AI Backend", version="1.0.0")
+
 
 # Enable CORS for Streamlit
 app.add_middleware(
@@ -43,6 +55,8 @@ def read_api_root():
     return {"status": "healthy"}
 
 # --- PROFILE ENDPOINTS ---
+api_router = APIRouter(dependencies=[Depends(verify_api_key)])
+
 
 def map_profile_to_response(db_profile: models.Profile) -> schemas.ProfileResponse:
     profile_dict = {
@@ -59,7 +73,7 @@ def map_profile_to_response(db_profile: models.Profile) -> schemas.ProfileRespon
     }
     return schemas.ProfileResponse.model_validate(profile_dict)
 
-@app.post("/api/profiles", response_model=schemas.ProfileResponse, status_code=status.HTTP_201_CREATED)
+@api_router.post("/api/profiles", response_model=schemas.ProfileResponse, status_code=status.HTTP_201_CREATED)
 def create_profile(profile: schemas.ProfileCreate, db: Session = Depends(get_db)):
     db_profile = models.Profile(
         name=profile.name,
@@ -76,19 +90,19 @@ def create_profile(profile: schemas.ProfileCreate, db: Session = Depends(get_db)
     db.refresh(db_profile)
     return map_profile_to_response(db_profile)
 
-@app.get("/api/profiles", response_model=List[schemas.ProfileResponse])
+@api_router.get("/api/profiles", response_model=List[schemas.ProfileResponse])
 def get_profiles(db: Session = Depends(get_db)):
     profiles = db.query(models.Profile).all()
     return [map_profile_to_response(p) for p in profiles]
 
-@app.get("/api/profiles/{profile_id}", response_model=schemas.ProfileResponse)
+@api_router.get("/api/profiles/{profile_id}", response_model=schemas.ProfileResponse)
 def get_profile(profile_id: int, db: Session = Depends(get_db)):
     profile = db.query(models.Profile).filter(models.Profile.id == profile_id).first()
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
     return map_profile_to_response(profile)
 
-@app.delete("/api/profiles/{profile_id}", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/api/profiles/{profile_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_profile(profile_id: int, db: Session = Depends(get_db)):
     profile = db.query(models.Profile).filter(models.Profile.id == profile_id).first()
     if not profile:
@@ -99,7 +113,7 @@ def delete_profile(profile_id: int, db: Session = Depends(get_db)):
 
 # --- CONSULTATION / ORCHESTRATION ---
 
-@app.post("/api/consult", response_model=schemas.ConsultResponse)
+@api_router.post("/api/consult", response_model=schemas.ConsultResponse)
 def consult_agents(request: schemas.ConsultRequest, db: Session = Depends(get_db)):
     try:
         results = orchestrator.process_consultation(
@@ -115,7 +129,7 @@ def consult_agents(request: schemas.ConsultRequest, db: Session = Depends(get_db
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Multi-Agent Execution Error: {str(e)}")
 
-@app.get("/api/encounters/profile/{profile_id}", response_model=List[schemas.ConsultResponse])
+@api_router.get("/api/encounters/profile/{profile_id}", response_model=List[schemas.ConsultResponse])
 def get_encounters_by_profile(profile_id: int, db: Session = Depends(get_db)):
     encounters = db.query(models.Encounter).filter(models.Encounter.profile_id == profile_id).order_by(models.Encounter.created_at.desc()).all()
     res_list = []
@@ -140,7 +154,7 @@ def get_encounters_by_profile(profile_id: int, db: Session = Depends(get_db)):
 
 # --- MEDICATION REMINDERS ---
 
-@app.post("/api/reminders", response_model=schemas.ReminderResponse, status_code=status.HTTP_201_CREATED)
+@api_router.post("/api/reminders", response_model=schemas.ReminderResponse, status_code=status.HTTP_201_CREATED)
 def create_reminder(reminder: schemas.ReminderCreate, db: Session = Depends(get_db)):
     db_reminder = models.MedicationReminder(
         profile_id=reminder.profile_id,
@@ -155,12 +169,12 @@ def create_reminder(reminder: schemas.ReminderCreate, db: Session = Depends(get_
     db.refresh(db_reminder)
     return db_reminder
 
-@app.get("/api/profiles/{profile_id}/reminders", response_model=List[schemas.ReminderResponse])
+@api_router.get("/api/profiles/{profile_id}/reminders", response_model=List[schemas.ReminderResponse])
 def get_reminders(profile_id: int, db: Session = Depends(get_db)):
     reminders = db.query(models.MedicationReminder).filter(models.MedicationReminder.profile_id == profile_id).all()
     return reminders
 
-@app.put("/api/reminders/{reminder_id}", response_model=schemas.ReminderResponse)
+@api_router.put("/api/reminders/{reminder_id}", response_model=schemas.ReminderResponse)
 def update_reminder(reminder_id: int, reminder_update: schemas.ReminderUpdate, db: Session = Depends(get_db)):
     db_reminder = db.query(models.MedicationReminder).filter(models.MedicationReminder.id == reminder_id).first()
     if not db_reminder:
@@ -174,7 +188,7 @@ def update_reminder(reminder_id: int, reminder_update: schemas.ReminderUpdate, d
     db.refresh(db_reminder)
     return db_reminder
 
-@app.delete("/api/reminders/{reminder_id}", status_code=status.HTTP_204_NO_CONTENT)
+@api_router.delete("/api/reminders/{reminder_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_reminder(reminder_id: int, db: Session = Depends(get_db)):
     db_reminder = db.query(models.MedicationReminder).filter(models.MedicationReminder.id == reminder_id).first()
     if not db_reminder:
@@ -185,7 +199,7 @@ def delete_reminder(reminder_id: int, db: Session = Depends(get_db)):
 
 # --- DASHBOARD ENDPOINT ---
 
-@app.get("/api/dashboard/stats", response_model=schemas.DashboardStats)
+@api_router.get("/api/dashboard/stats", response_model=schemas.DashboardStats)
 def get_dashboard_stats(db: Session = Depends(get_db)):
     total_profiles = db.query(models.Profile).count()
     total_encounters = db.query(models.Encounter).count()
@@ -226,3 +240,6 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
         "recent_encounters": recent_encounters,
         "risk_trends": risk_trends
     }
+
+app.include_router(api_router)
+

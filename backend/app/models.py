@@ -1,7 +1,42 @@
-from sqlalchemy import Column, Integer, String, Float, Boolean, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Boolean, Text, DateTime, ForeignKey, TypeDecorator
 from sqlalchemy.orm import relationship as sqlalchemy_relationship
 import datetime
 from backend.app.database import Base
+from backend.app.utils.security import encrypt_data, decrypt_data
+
+class EncryptedText(TypeDecorator):
+    """Custom SQLAlchemy type for transparent Fernet encryption of text fields."""
+    impl = Text
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        return encrypt_data(value)
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        return decrypt_data(value)
+
+class EncryptedFloat(TypeDecorator):
+    """Custom SQLAlchemy type for transparent Fernet encryption of float fields."""
+    impl = Text
+    cache_ok = True
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return None
+        return encrypt_data(str(value))
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return None
+        val_str = decrypt_data(value)
+        try:
+            return float(val_str)
+        except (ValueError, TypeError):
+            return 0.0
 
 class Profile(Base):
     __tablename__ = "profiles"
@@ -11,14 +46,15 @@ class Profile(Base):
     age = Column(Integer, nullable=False)
     gender = Column(String, nullable=False)
     relationship = Column(String, nullable=False) # Self, Spouse, Child, Parent, etc.
-    medical_history = Column(Text, default="[]") # JSON string list
-    allergies = Column(Text, default="[]") # JSON string list
+    medical_history = Column(EncryptedText, default="[]") # Encrypted JSON string list
+    allergies = Column(EncryptedText, default="[]") # Encrypted JSON string list
     location_zip = Column(String, nullable=False)
-    monthly_income = Column(Float, default=0.0) # Used for benefit schemes eligibility
+    monthly_income = Column(EncryptedFloat, default="0.0") # Encrypted float
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     encounters = sqlalchemy_relationship("Encounter", back_populates="profile", cascade="all, delete-orphan")
     reminders = sqlalchemy_relationship("MedicationReminder", back_populates="profile", cascade="all, delete-orphan")
+
 
 class Encounter(Base):
     __tablename__ = "encounters"

@@ -42,8 +42,7 @@ class HealthSphereOrchestrator:
         }
 
         # 2. Retrieve history and construct profile context using Health Guardian Memory Agent
-        past_encounters = memory_store.search_similar_encounters(profile_id=profile_id, current_symptoms=raw_symptoms, limit=3)
-        history_context = self.guardian_agent.synthesize_history_context(past_encounters, profile_details)
+        history_context = self.guardian_agent.synthesize_history_context(profile_id, raw_symptoms, profile_details)
 
         # 3. RUN Emergency Agent
         emergency_assessment = self.emergency_agent.assess(raw_symptoms, duration, language)
@@ -57,7 +56,6 @@ class HealthSphereOrchestrator:
             
             # Discover emergency hospitals
             hospital_resp = self.hospital_agent.discover(
-                db=db,
                 location_zip=profile.location_zip,
                 symptoms=raw_symptoms,
                 severity=severity_level,
@@ -130,7 +128,6 @@ class HealthSphereOrchestrator:
 
         # 7. RUN Hospital Discovery Agent
         hospital_resp = self.hospital_agent.discover(
-            db=db,
             location_zip=profile.location_zip,
             symptoms=symptom_analysis.structured_summary,
             severity=risk_assessment.severity_level,
@@ -139,7 +136,6 @@ class HealthSphereOrchestrator:
 
         # 8. RUN Government Benefits Agent
         benefits_resp = self.benefits_agent.assess_benefits(
-            db=db,
             profile_age=profile.age,
             profile_income=profile.monthly_income,
             symptoms=symptom_analysis.structured_summary,

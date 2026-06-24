@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional, Dict, Any
 from datetime import datetime
+from backend.app.utils.security import sanitize_text
 
 # --- PROFILE SCHEMAS ---
 class ProfileBase(BaseModel):
@@ -12,6 +13,19 @@ class ProfileBase(BaseModel):
     allergies: Optional[List[str]] = []
     location_zip: str
     monthly_income: Optional[float] = 0.0
+
+    @field_validator("name", "gender", "relationship", "location_zip")
+    @classmethod
+    def sanitize_profile_strings(cls, v: str) -> str:
+        return sanitize_text(v)
+
+    @field_validator("medical_history", "allergies")
+    @classmethod
+    def sanitize_profile_lists(cls, v: Optional[List[str]]) -> Optional[List[str]]:
+        if v is None:
+            return []
+        return [sanitize_text(item) for item in v]
+
 
 class ProfileCreate(ProfileBase):
     pass
@@ -40,6 +54,11 @@ class ReminderBase(BaseModel):
     frequency: str
     time_of_day: str # e.g. "08:00"
 
+    @field_validator("medication_name", "dosage", "frequency", "time_of_day")
+    @classmethod
+    def sanitize_reminder_strings(cls, v: str) -> str:
+        return sanitize_text(v)
+
 class ReminderCreate(ReminderBase):
     profile_id: int
 
@@ -65,6 +84,12 @@ class ConsultRequest(BaseModel):
     raw_symptoms: str
     duration: Optional[str] = "Unknown"
     language: Optional[str] = "English"
+
+    @field_validator("raw_symptoms", "duration", "language")
+    @classmethod
+    def sanitize_consult_strings(cls, v: str) -> str:
+        return sanitize_text(v)
+
 
 class HospitalInfo(BaseModel):
     name: str

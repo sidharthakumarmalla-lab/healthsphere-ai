@@ -1,8 +1,12 @@
+import os
 import requests
 import json
 import time
 
 BACKEND_URL = "http://127.0.0.1:8000/api"
+BACKEND_API_KEY = os.getenv("BACKEND_API_KEY", "healthsphere_secure_api_token_2026")
+headers = {"X-API-KEY": BACKEND_API_KEY}
+
 
 def test_health_check():
     print("Testing backend health check...")
@@ -25,7 +29,7 @@ def test_e2e_flow():
         "monthly_income": 12000.0
     }
     print("Creating patient profile for Sunita Devi...")
-    r = requests.post(f"{BACKEND_URL}/profiles", json=profile_data)
+    r = requests.post(f"{BACKEND_URL}/profiles", json=profile_data, headers=headers)
     assert r.status_code == 201, f"Failed to create profile: {r.text}"
     profile = r.json()
     profile_id = profile["id"]
@@ -39,7 +43,7 @@ def test_e2e_flow():
     }
     print("\nRunning Symptom Triage for mild cold (Expected Low/Medium Risk)...")
     start = time.time()
-    r = requests.post(f"{BACKEND_URL}/consult", json=consult_request)
+    r = requests.post(f"{BACKEND_URL}/consult", json=consult_request, headers=headers)
     duration = time.time() - start
     assert r.status_code == 200, f"Consultation failed: {r.text}"
     result = r.json()
@@ -65,7 +69,7 @@ def test_e2e_flow():
                 "frequency": med["frequency"],
                 "time_of_day": med["time_of_day"]
             }
-            rem_r = requests.post(f"{BACKEND_URL}/reminders", json=reminder_payload)
+            rem_r = requests.post(f"{BACKEND_URL}/reminders", json=reminder_payload, headers=headers)
             assert rem_r.status_code == 201, f"Failed to schedule reminder: {rem_r.text}"
             print(f"   [PASS] Scheduled: {med['medication_name']} ({med['dosage']}) - {med['frequency']} at {med['time_of_day']}")
     else:
@@ -77,7 +81,7 @@ def test_e2e_flow():
             "frequency": "Daily",
             "time_of_day": "09:00"
         }
-        rem_r = requests.post(f"{BACKEND_URL}/reminders", json=reminder_payload)
+        rem_r = requests.post(f"{BACKEND_URL}/reminders", json=reminder_payload, headers=headers)
         assert rem_r.status_code == 201, f"Failed to schedule manual reminder: {rem_r.text}"
         print("   [PASS] Scheduled manual reminder: Multivitamin")
 
@@ -89,7 +93,7 @@ def test_e2e_flow():
     }
     print("\nRunning Emergency Triage for crushing chest pain (Expected EMERGENCY)...")
     start = time.time()
-    r = requests.post(f"{BACKEND_URL}/consult", json=emergency_request)
+    r = requests.post(f"{BACKEND_URL}/consult", json=emergency_request, headers=headers)
     duration = time.time() - start
     assert r.status_code == 200, f"Consultation failed: {r.text}"
     result = r.json()
@@ -103,7 +107,7 @@ def test_e2e_flow():
 
     # 5. Verify Dashboard stats
     print("\nChecking dashboard stats...")
-    r = requests.get(f"{BACKEND_URL}/dashboard/stats")
+    r = requests.get(f"{BACKEND_URL}/dashboard/stats", headers=headers)
     assert r.status_code == 200, f"Failed to get dashboard stats: {r.text}"
     stats = r.json()
     print("[PASS] Stats retrieved:")

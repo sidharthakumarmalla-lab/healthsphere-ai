@@ -24,8 +24,9 @@ class EmergencyAgent(BaseAgent):
         prompt = (
             f"Symptoms reported: '{symptoms}' (Duration: {duration}).\n"
             f"Target Language: {language}.\n"
-            f"If language is Hindi, write the 'reason' and 'immediate_actions' in clear Hindi Devnagari script.\n"
+            f"If language is not English, write the 'reason' and 'immediate_actions' in the clear native script of the target language (e.g., Devanagari for Hindi/Marathi, Tamil script for Tamil, Telugu script for Telugu, Bengali script for Bengali, Kannada script for Kannada, Malayalam script for Malayalam, Gujarati script for Gujarati, Gurmukhi for Punjabi, Odia script for Odia).\n"
             f"Ensure recommendations refer to Indian helpline numbers like 112 (National Emergency) and 108 (Ambulance).\n"
             f"Analyze if this is an immediate emergency."
         )
         return self.generate_structured(prompt, EmergencyAssessment)
+

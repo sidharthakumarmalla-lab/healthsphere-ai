@@ -26,7 +26,7 @@ class MedicineReminderAgent(BaseAgent):
             f"Guidance: '{treatment_guidance}'\n"
             f"Target Language: {language}\n"
             f"Map medicines to standard Indian equivalents (e.g., Paracetamol -> Dolo-650 or Crocin, ORS -> Electral, Cetirizine -> Okacet, Pantoprazole -> Pan-20/40).\n"
-            f"If language is Hindi, write the 'medication_name', 'dosage', 'frequency', and 'general_guidelines' in clear Hindi Devnagari script.\n"
+            f"If language is not English, write the 'medication_name', 'dosage', 'frequency', and 'general_guidelines' in the clear native script of the target language (e.g., Devanagari for Hindi/Marathi, Tamil script for Tamil, Telugu script for Telugu, Bengali script for Bengali, Kannada script for Kannada, Malayalam script for Malayalam, Gujarati script for Gujarati, Gurmukhi for Punjabi, Odia script for Odia).\n"
             f"Generate structured reminders."
         )
         return self.generate_structured(prompt, MedicineReminderResponse)

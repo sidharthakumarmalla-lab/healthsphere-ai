@@ -29,7 +29,7 @@ class TreatmentGuidanceAgent(BaseAgent):
             f"Risk Level Assessed: {risk_level}\n"
             f"Medical Research Findings: {research_summary}\n"
             f"Target Language: {language}\n"
-            f"If language is Hindi, write the 'home_care_measures', 'warning_signs', 'recommended_next_steps', 'educational_notes', and 'clinical_disclaimer' in clear Hindi Devnagari script.\n"
+            f"If language is not English, write the 'home_care_measures', 'warning_signs', 'recommended_next_steps', 'educational_notes', and 'clinical_disclaimer' in the clear native script of the target language (e.g., Devanagari for Hindi/Marathi, Tamil script for Tamil, Telugu script for Telugu, Bengali script for Bengali, Kannada script for Kannada, Malayalam script for Malayalam, Gujarati script for Gujarati, Gurmukhi for Punjabi, Odia script for Odia).\n"
             f"Formulate safe treatment guidance."
         )
         return self.generate_structured(prompt, TreatmentGuidanceResponse)

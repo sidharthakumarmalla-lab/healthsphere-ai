@@ -21,7 +21,7 @@ class SymptomAnalysisAgent(BaseAgent):
             f"Symptoms: '{symptoms}'.\n"
             f"Patient Profile Context: {profile_context}\n"
             f"Target Language: {language}.\n"
-            f"If language is Hindi, generate the 'structured_summary' in Hindi Devnagari script.\n"
-            f"Note: keep the list keys 'parsed_symptoms' and 'affected_body_parts' in English for standard backend processing, but write the summary in the target language."
+            f"If language is not English, generate the 'structured_summary' in the clear native script of the target language (e.g., Devanagari for Hindi/Marathi, Tamil script for Tamil, Telugu script for Telugu, Bengali script for Bengali, Kannada script for Kannada, Malayalam script for Malayalam, Gujarati script for Gujarati, Gurmukhi for Punjabi, Odia script for Odia).\n"
+            f"Note: keep the list keys 'parsed_symptoms' and 'affected_body_parts' in English for standard backend processing, but write the 'structured_summary' in the target language."
         )
         return self.generate_structured(prompt, SymptomAnalysis)
