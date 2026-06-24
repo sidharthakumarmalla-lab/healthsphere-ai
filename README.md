@@ -10,23 +10,31 @@ Here is a visual tour of the HealthSphere AI portal:
 
 ### 1. Main Dashboard & Insights
 View clinic-wide metrics, emergency alerts, active schedules, and historical risk level trends plotted dynamically.
-![Dashboard](assets/landing_page.png)
+<img width="1905" height="852" alt="image" src="https://github.com/user-attachments/assets/f9be9910-ec8a-4423-a8fd-5f1e021c1759" />
+
 
 ### 2. Multi-Agent AI Symptom Triage
 Perform intelligent symptom analysis with a structured assessment, risk score, clinical research citations, home care recommendations, eligible welfare benefits, and recommended local healthcare clinics.
-![Symptom Consultation Results](assets/consultation_results.png)
+
+<img width="1887" height="837" alt="image" src="https://github.com/user-attachments/assets/38c7c928-a1aa-428a-bfb3-65c679f72d1d" />
+
 
 ### 3. Family Health Profiles
 Manage individual profiles for each family member, including age, gender, monthly income, location PIN code, pre-existing conditions, and drug/environmental allergies.
-![Family Profiles](assets/family_profiles.png)
+<img width="1895" height="855" alt="image" src="https://github.com/user-attachments/assets/fce1f17e-fd71-4a98-a9e5-499d1e11bc04" />
+
 
 ### 4. Medication Reminders & Schedules
 Add medication schedules manually or directly import AI-suggested drug dosages, frequencies, and timings.
-![Medication Reminders](assets/medication_reminders.png)
+
+<img width="1896" height="842" alt="image" src="https://github.com/user-attachments/assets/ad960992-15de-4a0a-9b4d-31cdb8e3f2de" />
+
 
 ### 5. Historical Consultation Logs
 Access past clinical sessions indexed in the patient's long-term memory.
-![Consultation History](assets/consultation_history.png)
+
+<img width="1896" height="852" alt="image" src="https://github.com/user-attachments/assets/e8cd698d-f153-48fc-9a35-d2479ffabde8" />
+
 
 ---
 
