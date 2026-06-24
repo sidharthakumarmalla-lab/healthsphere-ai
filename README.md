@@ -1,4 +1,4 @@
-# HealthSphere AI ❇️
+#  HealthSphere AI  - Intelligent Multi-Agent Rural Healthcare & Medical Assistance Platform ❇️
 
 HealthSphere AI is a state-of-the-art **Multi-Agent Rural Healthcare Portal** designed to bridge the gap between rural/underserved communities and quality clinical assistance. By leveraging specialized AI agents cooperating through an intelligent orchestration layer, HealthSphere AI provides bilingual symptom assessment, risk triage, local healthcare discovery, government health scheme eligibility check, and medication reminder scheduling.
 
